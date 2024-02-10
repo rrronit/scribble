@@ -1,9 +1,9 @@
 from django.shortcuts import render
-from django.contrib.auth.models import User
+
 
 
 def index(req):
-    User.objects({})
+    
     return render(req,"index.html")
 
 

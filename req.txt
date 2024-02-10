@@ -1,0 +1,5 @@
+django
+psycopg2-binary
+channels
+redis[hiredis]
+python_dotenv

@@ -11,7 +11,10 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
+from dotenv import load_dotenv
+load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -31,6 +34,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+   
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -39,6 +43,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "account",
     "post",
+    'post',
+    'account',
+
 ]
 
 MIDDLEWARE = [
@@ -71,7 +78,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'scribble.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
@@ -79,14 +85,16 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'postgres',
-        'USER': 'postgres.dnltmfhvtgzozvroiwor',
-        'PASSWORD': 'PyjZ1tYtuEgIKQrB',
-        'HOST': 'aws-0-ap-south-1.pooler.supabase.com',
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': os.getenv('DB_HOST'),
         'PORT': '5432',
     }
 }
-
-
+"""  'USER': 'postgres.dnltmfhvtgzozvroiwor',
+        'PASSWORD': 'PyjZ1tYtuEgIKQrB',
+        'HOST': 'aws-0-ap-south-1.pooler.supabase.com',
+"""
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 
@@ -122,7 +130,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
 
 STATICFILES_DIRS = [
     BASE_DIR / "static",
@@ -132,3 +144,6 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+

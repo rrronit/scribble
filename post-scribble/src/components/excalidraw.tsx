@@ -1,12 +1,15 @@
+
 'use client'
 
-import { useState } from 'react'
+import { MouseEventHandler, useState } from 'react'
 import { Excalidraw, exportToBlob, serializeAsJSON } from "@excalidraw/excalidraw"
 import * as fal from "@fal-ai/serverless-client"
 import Image from 'next/image'
+import { useRouter} from 'next/navigation'
+
 
 fal.config({
-  proxyUrl: "/api/fal/proxy",
+  proxyUrl: "/api/fal/prox",
 })
 
 const seed = Math.floor(Math.random() * 100000)
@@ -15,9 +18,9 @@ const baseArgs = {
   strength: .99,
   seed
 }
-export default function Home() {
+const ExcalidrawWrapper: React.FC = () => {
   const [input, setInput] = useState('masterpiece')
-  const [image, setImage] = useState(null)
+  const [image, setImage] = useState(localStorage.getItem("image") as string)
   const [sceneData, setSceneData] = useState<any>(null)
   const [excalidrawAPI, setExcalidrawAPI] = useState<any>(null)
   const [_appState, setAppState] = useState<any>(null)
@@ -41,12 +44,16 @@ export default function Home() {
       files: excalidrawAPI.getFiles(),
       getDimensions: () => { return { width: 450, height: 450 } }
     })
-    return await new Promise(r => { let a = new FileReader(); a.onload = r; a.readAsDataURL(blob) }).then((e:any) => e.target.result)
+    return await new Promise(r => { let a = new FileReader(); a.onload = r; a.readAsDataURL(blob) }).then((e: any) => e.target.result)
   }
-
+const router=useRouter()
+  function handlepost(event: any): void {
+    localStorage.setItem("image",image)
+    router.push("post/create")      
+  }
   return (
     <main className="p-12">
-      
+
       <input
         className='border text-black rounded-lg p-2 w-full mb-2'
         value={input}
@@ -56,7 +63,6 @@ export default function Home() {
           send({
             ...baseArgs,
             prompt: e.target.value,
-            
             image_url: dataUrl
           })
         }}
@@ -96,7 +102,10 @@ export default function Home() {
           )
         }
       </div>
+      <div>
+        <button onClick={handlepost} className=' p-10 bg-blue-500 font '> POST</button>
+      </div>
     </main>
   )
 }
-
+export default ExcalidrawWrapper;

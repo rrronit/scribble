@@ -8,10 +8,13 @@ import random
 import redis
 from django.core.mail import send_mail
 import os
+import threading
+
 
 r = redis.Redis(
   host=os.getenv('REDIS_HOST'),
-  port=41204,
+  ssl=True,
+  port=40073,
   password=os.getenv('REDIS_PASSWORD'),
 )
 
@@ -30,13 +33,14 @@ def send_otp_email(email,otp):
 
 def verify_otp(req):
     if req.method == 'POST':
+
       user_otp=req.POST['user_otp']
 
       email=req.session.get('user_data')['email']
-
       redis_key = f'otp:{email}'
       stored_otp = r.get(redis_key)
       user_data = req.session.get('user_data')
+      
       if stored_otp!=None and int(stored_otp) == int(user_otp):
          if user_data:
                 user = User(username=user_data['username'], email=user_data['email'])
@@ -52,7 +56,6 @@ def verify_otp(req):
         return render(req,'account/verification.html',params)   
     user=req.session.get('user_data')
     if user:
-      print('fsfsfsfs')
       print(user)
       params={'email':user['email']}
       return render(req,'account/verification.html',params)
@@ -98,18 +101,15 @@ def register(req):
        print(redis_key)
 
        #send_otp_email(email, otp)
-       mail={
-       'email':email,
-         'otp':otp}
-
-       r.publish(channel='send',message=json.dumps(mail))
-
+       threading.Thread(target=send_otp_email, args=(email, otp)).start()
+      
        req.session['user_data'] = {
             'username': username,
             'email': email,
             'password': password,
         }       
        response=redirect('/verification')
+       print('dsfsfs')
        return response
     else:
      

@@ -28,13 +28,13 @@ SECRET_KEY = 'django-insecure-&os)90$*+e14!xt&2anesq%gzfv%ocq1x6#n$vc)lyu#lqivps
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
 
 INSTALLED_APPS = [
-   
+    "daphne",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -43,9 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "account",
     "post",
-    'post',
-    'account',
-
+    "message",
 ]
 
 MIDDLEWARE = [
@@ -76,7 +74,6 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'scribble.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
@@ -90,11 +87,9 @@ DATABASES = {
         'HOST': os.getenv('DB_HOST'),
         'PORT': '5432',
     }
-}
-"""  'USER': 'postgres.dnltmfhvtgzozvroiwor',
-        'PASSWORD': 'PyjZ1tYtuEgIKQrB',
-        'HOST': 'aws-0-ap-south-1.pooler.supabase.com',
-"""
+} 
+
+
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 
@@ -145,5 +140,22 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+ 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER ='test.mail240723@gmail.com'
+EMAIL_HOST_PASSWORD ='glzehocovyvofevf'
+
+
+ASGI_APPLICATION = 'scribble.asgi.application'
+
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
+    },
+}
 
 

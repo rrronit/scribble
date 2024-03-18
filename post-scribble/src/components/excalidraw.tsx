@@ -9,13 +9,13 @@ import { useRouter} from 'next/navigation'
 
 
 fal.config({
-  proxyUrl: "/api/fal/prox",
+  proxyUrl: "/api/fal/proxy",
 })
 
 const seed = Math.floor(Math.random() * 100000)
 const baseArgs = {
   sync_mode: true,
-  strength: .8,
+  strength: .99,
   seed
 }
 const ExcalidrawWrapper: React.FC = () => {

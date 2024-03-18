@@ -17,6 +17,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 "all_together",
                 self.channel_name
             )
+        
+        
         await self.accept()
  
        
@@ -36,8 +38,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
         if message.strip() =="":
             return
 
-        #user =  await sync_to_async(User.objects.get,thread_sensitive=True)(username=username)
-        #pre_message = await sync_to_async(Message.objects.create,thread_sensitive=True)(user=user,content=message,timestamp=timestamp)
+        user =  await sync_to_async(User.objects.get,thread_sensitive=True)(username=username)
+        pre_message = await sync_to_async(Message.objects.create,thread_sensitive=True)(user=user,content=message,timestamp=timestamp)
             
         await self.channel_layer.group_send(
             'all_together',

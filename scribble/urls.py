@@ -20,5 +20,6 @@ import post
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("",include("post.urls")),
-    path("",include("account.urls"))
+    path("",include("account.urls")),
+    path("",include("message.urls")),
 ]

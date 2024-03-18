@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
@@ -17,8 +17,6 @@ def index(req):
     if user.is_authenticated:
         posts=Post.objects.all()
         params={"posts":posts}
-       
-        
         return render(req,"homepage.html",params)
     return render(req,"index.html")
     
@@ -37,11 +35,7 @@ def createPost(req):
     storage.upload(file=binary_image,path=file_path,file_options={"content-type":"image/jpeg"})
     newPost=Post(user=user,image_url=storage.get_public_url(file_path))
     newPost.save()
-   
     return HttpResponse("done")
-
-
-
 
 
 def deletePost(req):
@@ -55,3 +49,9 @@ def deletePost(req):
         return HttpResponse("done")
     
     return HttpResponse("not allowed",status=404)
+
+
+
+
+
+    

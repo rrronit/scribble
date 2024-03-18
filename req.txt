@@ -3,3 +3,7 @@ psycopg2-binary
 channels
 redis[hiredis]
 python_dotenv
+supabase
+daphne
+channels_redis
+

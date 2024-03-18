@@ -164,9 +164,10 @@
             `;
 
         messageContainer.appendChild(messageElement);
-        
+        messageContainer.scrollTop = messageContainer.scrollHeight;
 
       };
+      
 
       function handleClick() {
         const usernameInput = document.querySelector("#chat-message-input").value;

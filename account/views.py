@@ -9,6 +9,13 @@ import redis
 from django.core.mail import send_mail
 import os
 import threading
+from supabase import create_client
+import base64
+import uuid
+
+supabaseUrl = "https://dnltmfhvtgzozvroiwor.supabase.co"
+supabasekey="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRubHRtZmh2dGd6b3p2cm9pd29yIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcwNzMxNzQ0NCwiZXhwIjoyMDIyODkzNDQ0fQ.UeEyCm9MCEheJ9ZElyJoX1ywcdXEJvv3jhH6n8QvZ4E"
+supabase=create_client(supabaseUrl,supabasekey)
 
 
 r = redis.Redis(
@@ -44,8 +51,10 @@ def verify_otp(req):
       if stored_otp!=None and int(stored_otp) == int(user_otp):
          if user_data:
                 user = User(username=user_data['username'], email=user_data['email'])
+                profile=Profile(user=user)
                 user.set_password(user_data['password'])
                 user.save()
+                profile.save()
                 auth.login(req,user)
                 del req.session['user_data']
                
@@ -162,3 +171,137 @@ def logout(req):
    auth.logout(req)
    
    return redirect("/")
+
+
+from .models import Profile 
+from post.models import Post
+
+def profile(request,id_user):
+   
+    user_object = User.objects.get(username=id_user)
+ 
+    profile = Profile.objects.get(user=user_object)
+    user_profile = Profile.objects.get(user=user_object)
+    user_posts = Post.objects.filter(user=user_object).order_by('-created_at')
+    user_post_length = len(user_posts)
+
+
+    follower = request.user.username
+    user = id_user
+    
+    if Followers.objects.filter(follower=follower, user=user).first():
+        follow_unfollow = 'Unfollow'
+    else:
+        follow_unfollow = 'Follow'
+
+    user_followers = len(Followers.objects.filter(user=id_user))
+    user_following = len(Followers.objects.filter(follower=id_user))
+
+    context = {
+        'user_object': user_object,
+        'user_profile': user_profile,
+        'user_posts': user_posts,
+        'user_post_length': user_post_length,
+        'profile': profile,
+        'follow_unfollow':follow_unfollow,
+        'user_followers': user_followers,
+        'user_following': user_following,
+    }
+    
+    
+   
+    return render(request, 'profile.html', context)
+
+from .models import Followers
+
+def edit(request,id_user):
+    
+    if request.user.username == id_user:
+        
+        user_object = User.objects.get(username=id_user)
+
+      
+        profile = Profile.objects.get(user=user_object)
+        user_profile = Profile.objects.get(user=user_object)
+        if request.method == 'POST':
+         
+            image = request.FILES.get("image")
+            if image:
+                
+               image=base64.b64encode(image.read())
+         
+               binary_image = base64.b64decode(image)
+               storage = supabase.storage.from_("scribble")
+               file_name=str(uuid.uuid4())
+               file_path="Profile/"+file_name+".jpg"
+               storage.upload(file=binary_image,path=file_path,file_options={"content-type":"image/jpeg"})
+               user_profile.profileimg = storage.get_public_url(file_path)
+
+            bio = request.POST['bio']
+            location = request.POST['location']
+
+            print(user_profile.profileimg)
+            user_profile.bio = bio
+            user_profile.location = location
+            user_profile.save()
+            
+
+      
+            # if request.FILES.get('image') != None:
+          
+            #  bio = request.POST['bio']
+            #  location = request.POST['location']
+
+            #  user_profile.profileimg = image
+            #  user_profile.bio = bio
+            #  user_profile.location = location
+            #  user_profile.save()
+            #  user_profile = Profile.objects.get(user=user_object)
+            #  user_posts = Post.objects.filter(user=user_object).order_by('-created_at')
+            #  user_post_length = len(user_posts)
+             
+            #  follower = request.user.username
+            #  user = id_user
+            
+            #  if Followers.objects.filter(follower=follower, user=user).first():
+            #    follow_unfollow = 'Unfollow'
+            #  else:
+            #    follow_unfollow = 'Follow'
+            #  user_followers = len(Followers.objects.filter(user=id_user))
+            #  user_following = len(Followers.objects.filter(follower=id_user))
+
+            # context = {
+            #       'user_object': user_object,
+            #       'user_profile': user_profile,
+            #       'user_posts': user_posts,
+            #       'user_post_length': user_post_length,
+            #       'profile': profile,
+            #       'follow_unfollow':follow_unfollow,
+            #       'user_followers': user_followers,
+            #       'user_following': user_following,
+            #    }
+    
+    
+            
+            return redirect( '/profile/'+id_user)
+
+
+        else:
+            return render(request, 'profile.html') 
+
+
+def follow(request):
+    if request.method == 'POST':
+        follower = request.POST['follower']
+        user = request.POST['user']
+
+        if Followers.objects.filter(follower=follower, user=user).first():
+            delete_follower = Followers.objects.get(follower=follower, user=user)
+            delete_follower.delete()
+            return redirect('/profile/'+user)
+        else:
+            new_follower = Followers.objects.create(follower=follower, user=user)
+            new_follower.save()
+            return redirect('/profile/'+user)
+    else:
+        return redirect('/')

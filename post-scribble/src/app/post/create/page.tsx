@@ -15,7 +15,7 @@ const Page = () => {
     }, [router])
     const handleSubmit = ():void => {
 
-        fetch("/createPost/", { method: "post", body: image }).then(res => console.log(res))
+        fetch("http://localhost:8000/createPost/", { method: "post", body: image }).then(res => console.log(res))
     }
     return (
         <div>

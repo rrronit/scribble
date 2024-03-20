@@ -9,12 +9,14 @@
   <title>Document</title>
   <link rel="stylesheet" href="{%static 'homepage/homepage.css'%}">
   <script src="{%static 'homepage/homepage.js'%}"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body>
   <div id="nav-bar">
-    <input id="nav-toggle" type="checkbox" >
+    <input id="nav-toggle" type="checkbox">
     <div id="nav-header">
       <a id="nav-title" href="/" target="_blank">
         SCRIBBLE
@@ -45,10 +47,10 @@
         <i class="fas fa-fire"></i><a>Message</a>
       </div>
       <div class="nav-button">
-        <i class="fas fa-magic"></i><a href="http://localhost:3000/post" >Create Post</a>
+        <i class="fas fa-magic"></i><a href="http://localhost:3000/post">Create Post</a>
       </div>
       <hr>
-     
+
       <div id="nav-content-highlight"></div>
     </div>
     <input id="nav-footer-toggle" type="checkbox">
@@ -61,26 +63,26 @@
           <a id="nav-footer-title" href="" target="_blank">{{user}}</a>
         </div>
 
+      </div>
     </div>
   </div>
-  </div>
-<div class="top-bar">
- 
+  <div class="top-bar">
+
     <a id="top-title" href="/" target="_blank">
       <p>SCRIBBLE</p>
     </a>
 
-  <div>
-    <a id="nav-icons" href="/" target="_blank">
-      <i class="fa fa-plus"></i>
-    </a>
-    <a id="nav-icons" href="/" target="_blank">
-      <i class="fa fa-message"></i>
-    </a>
+    <div>
+      <a id="nav-icons" href="/" target="_blank">
+        <i class="fa fa-plus"></i>
+      </a>
+      <a id="nav-icons" href="/" target="_blank">
+        <i class="fa fa-message"></i>
+      </a>
+    </div>
   </div>
-</div>
 
-</div>
+  </div>
   <nav class="bottom-bar">
     <a class="active" href="#">
       <svg viewBox="0 0 100 100">
@@ -93,7 +95,7 @@
         Home
       </span>
     </a>
-  
+
     <a href="#">
       <svg viewBox="0 0 100 100">
         <g transform="translate(5 5) scale(0.9 0.9)">
@@ -105,7 +107,7 @@
         Likes
       </span>
     </a>
-  
+
     <a href="#">
       <svg viewBox="0 0 100 100">
         <g transform="translate(5 5) scale(0.9 0.9)">
@@ -117,7 +119,7 @@
         Search
       </span>
     </a>
-  
+
     <a href="#">
       <svg viewBox="0 0 100 100">
         <g transform="translate(5 5) scale(0.9 0.9)">
@@ -131,146 +133,177 @@
     </a>
   </nav>
 
-<div class="posts">
-{%for post in posts %}
-  <div class="album box">
-    <div class="status-main">
-      <img src={{post.user}} class="status-img" />
-      <div class="album-detail">
-        <div class="album-title"><strong>{{post.user}}</strong></div>
-        <div class="album-date">6 hours ago</div>
+  <div class="posts">
+    {%for post in posts %}
+    <div class="album box">
+      <div class="status-main">
+        <img src={{post.user}} class="status-img" />
+        <div class="album-detail">
+          <div class="album-title"><strong>{{post.user}}</strong></div>
+          <div class="album-date">6 hours ago</div>
+        </div>
+        <button class="intro-menu"></button>
       </div>
-      <button class="intro-menu"></button>
+      <div class="album-content">{{post.content}}
+
+        <img src={{post.image_url}} alt="" class="album-photo" />
+      </div>
+      <div class="album-actions">
+        <button onclick="likeImg({{post.id}})" clbuttonss="album-action">
+          <svg stroke="currentColor" stroke-width="2" fill="red" stroke-linecap="round" stroke-linejoin="round"
+            viewBox="0 0 24 24">
+            <path
+              d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" />
+          </svg>
+          <p id="imglikeCount-{{post.id}}">{{post.like_count}}</p>
+        </button>
+        <a href="#" class="album-action">
+          <svg stroke="currentColor" stroke-width="2" fill="red" stroke-linecap="round" stroke-linejoin="round"
+            class="css-i6dzq1" viewBox="0 0 24 24">
+            <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+          </svg>
+          {{post.comment_count}}
+        </a>
+        <a href="#" class="album-action">
+          <svg stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+            class="css-i6dzq1" viewBox="0 0 24 24">
+            <path d="M17 1l4 4-4 4" />
+            <path d="M3 11V9a4 4 0 014-4h14M7 23l-4-4 4-4" />
+            <path d="M21 13v2a4 4 0 01-4 4H3" />
+          </svg>
+        </a>
+      </div>
     </div>
-    <div class="album-content">{{post.content}}
-     
-        <img
-          src= {{post.image_url}}
-          alt="" class="album-photo" />
-       </div>
-    <div class="album-actions">
-      <a href="#" class="album-action">
-        <svg stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
-          viewBox="0 0 24 24">
-          <path
-            d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" />
-        </svg>
-       {{post.like_count}}
-      </a>
-      <a href="#" class="album-action">
-        <svg stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
-          class="css-i6dzq1" viewBox="0 0 24 24">
-          <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
-        </svg>
-        {{post.comment_count}}
-      </a>
-      <a href="#" class="album-action">
-        <svg stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
-          class="css-i6dzq1" viewBox="0 0 24 24">
-          <path d="M17 1l4 4-4 4" />
-          <path d="M3 11V9a4 4 0 014-4h14M7 23l-4-4 4-4" />
-          <path d="M21 13v2a4 4 0 01-4 4H3" />
-        </svg>
-      </a>
-    </div>
+
+
+    {% endfor %}
   </div>
 
+  <script>
+    let checkbox = document.getElementById('nav-toggle');
+    var targetDiv = document.querySelectorAll('.album');
+    if (checkbox.checked) {
+      targetDiv.forEach(e => e.style.marginLeft = "120px")
+    } else {
+      targetDiv.forEach(e => e.style.marginLeft = "300px")
 
-{% endfor %}
-</div>
-
-<script>
-   let checkbox = document.getElementById('nav-toggle');
-   var targetDiv = document.querySelectorAll('.album');
-   if (checkbox.checked) {
-        targetDiv.forEach(e=>e.style.marginLeft="120px")
-      } else {
-        targetDiv.forEach(e=>e.style.marginLeft="300px")
-
-      }
-   checkbox.addEventListener('change', function() {
+    }
+    checkbox.addEventListener('change', function () {
       if (checkbox.checked) {
-        targetDiv.forEach(e=>e.style.marginLeft="120px")
+        targetDiv.forEach(e => e.style.marginLeft = "120px")
       } else {
-        targetDiv.forEach(e=>e.style.marginLeft="300px")
+        targetDiv.forEach(e => e.style.marginLeft = "300px")
 
       }
     });
-</script>
+  </script>
 
-<script>
-  const navigationOptions = [   
-  {
-    name: 'home',
-    color: '#5B37B7',
-    bg:"#332968"
-    
-  },
-  {
-    name: 'likes',
-    color: '#C9379D',
-    bg:"#aa0084"
+  <script>
+    const navigationOptions = [
+      {
+        name: 'home',
+        color: '#5B37B7',
+        bg: "#332968"
 
-  },
-  {
-    name: 'search',
-    color: '#E6A919',
-    bg:"#d67700"
-  },
-  {
-    name: 'profile',
-    color: '#1892A6',
-    bg:"#007179"
-  }
-];
+      },
+      {
+        name: 'likes',
+        color: '#C9379D',
+        bg: "#aa0084"
 
-const links = document.querySelectorAll('nav a');
+      },
+      {
+        name: 'search',
+        color: '#E6A919',
+        bg: "#d67700"
+      },
+      {
+        name: 'profile',
+        color: '#1892A6',
+        bg: "#007179"
+      }
+    ];
 
-function handleClick(e) {
-  e.preventDefault();
-  links.forEach(link => {
-    if (link.classList.contains('active')) {
-      link.classList.remove('active');
+    const links = document.querySelectorAll('nav a');
+
+    function handleClick(e) {
+      e.preventDefault();
+      links.forEach(link => {
+        if (link.classList.contains('active')) {
+          link.classList.remove('active');
+        }
+      });
+
+      const name = this.textContent.trim().toLowerCase();
+      const { color, bg } = navigationOptions.find(item => item.name === name);
+
+      const style = window.getComputedStyle(this);
+      const hoverColor = style.getPropertyValue('--hover-c');
+      if (color !== hoverColor) {
+        this.style.setProperty('--hover-bg', `${color}20`);
+        this.style.setProperty('--hover-c', color);
+      }
+
+      this.classList.add('active');
+      document.querySelector('body').style.background = color;
+      document.querySelector(".top-bar").style.background = bg
     }
-  });
 
-  const name = this.textContent.trim().toLowerCase();
-  const { color,bg } = navigationOptions.find(item => item.name === name);
+    links.forEach(link => link.addEventListener('click', handleClick));
+  </script>
+  <script>
+    let prevScrollPos = window.pageYOffset;
 
-  const style = window.getComputedStyle(this);
-  const hoverColor = style.getPropertyValue('--hover-c');
-  if (color !== hoverColor) {
-    this.style.setProperty('--hover-bg', `${color}20`);
-    this.style.setProperty('--hover-c', color);
-  }
+    window.onscroll = function () {
+      let currentScrollPos = window.pageYOffset;
 
-  this.classList.add('active');
-  document.querySelector('body').style.background = color;
-  document.querySelector(".top-bar").style.background=bg
-}
+      if (prevScrollPos > currentScrollPos) {
+        // Scrolling up, show the navbar
+        document.querySelector(".top-bar").style.top = "0";
+      } else {
+        // Scrolling down, hide the navbar
+        document.querySelector(".top-bar").style.top = "-200px";
+      }
 
-links.forEach(link => link.addEventListener('click', handleClick));
-</script>
-<script>
-   let prevScrollPos = window.pageYOffset;
+      prevScrollPos = currentScrollPos;
+    }
+  </script>
 
-window.onscroll = function() {
-  let currentScrollPos = window.pageYOffset;
 
-  if (prevScrollPos > currentScrollPos) {
-    // Scrolling up, show the navbar
-    document.querySelector(".top-bar").style.top = "0";
-  } else {
-    // Scrolling down, hide the navbar
-    document.querySelector(".top-bar").style.top = "-200px";
-  }
+  <script>
+    const likeImg = async (imgId) => {
+      try {
+        const res = await fetch('like-image', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ imgId: imgId }),
+        });
+        const data = await res.json();
+        
 
-  prevScrollPos = currentScrollPos;
-}
-</script>
+        if (res.ok) {
+          const likeCount = document.getElementById("imglikeCount-"+imgId);
+          const counter = parseInt(likeCount.innerText) ;
+          if (data.status=="liked"){
+            likeCount.innerText = counter+1;
+          }
+          else  if (data.status=="unliked"){
+            likeCount.innerText = counter-1;
+          }
+        } else {
+            // Handle error response
+            console.error(data.error);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+
+
+    }
+  </script>
 </body>
-
-
 
 
 </html>

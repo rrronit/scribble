@@ -24,7 +24,7 @@ def index(req):
 
 @csrf_exempt
 def createPost(req):
-    user=req.user
+    user=User.objects.all()[0]
     image=req.body
     image=image.decode("utf-8")
     base64_image = image.split(',')[1]

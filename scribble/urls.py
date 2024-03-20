@@ -22,4 +22,5 @@ urlpatterns = [
     path("",include("post.urls")),
     path("",include("account.urls")),
     path("",include("message.urls")),
+    path("",include("explore.urls")),
 ]

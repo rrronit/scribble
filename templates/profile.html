@@ -10,11 +10,15 @@
     <script src="https://kit.fontawesome.com/cb792c0850.js" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <title>{{user_profile.user}}</title>
-    <link rel="stylesheet" href="{% static 'css/app.css' %}">
+    <link rel="stylesheet" href="{%static 'css/app.css'%}">
     <style>
         /* Custom styles for the sidebar */
+
         .sidebar {
             background-color: #f8f9fa;
             height: 100vh;
@@ -56,13 +60,132 @@
 </head>
 
 <body>
-    {% load static %}
+ 
+
+
+    <div id="nav-bar">
+        <input id="nav-toggle" type="checkbox">
+        <div id="nav-header">
+          <a id="nav-title" href="/" target="_blank">
+            SCRIBBLE
+          </a>
+          <label for="nav-toggle">
+            <a id="nav-toggle-burger"></a>
+          </label>
+          <hr>
+        </div>
+        <div id="nav-content">
+          <div class="nav-button">
+            <i class="fas fa-palette"></i><a>Home</a>
+          </div>
+          <div class="nav-button">
+            <i class="fas fa-images"></i><a>Explore</a>
+          </div>
+          <div class="nav-button">
+            <i class="fas fa-thumbtack"></i><a>Saved Post</a>
+          </div>
+          <hr>
+          <div class="nav-button">
+            <i class="fas fa-heart"></i><a>Like</a>
+          </div>
+          <div class="nav-button">
+            <i class="fas fa-chart-line"></i><a>Trending</a>
+          </div>
+          <div class="nav-button">
+            <i class="fas fa-fire"></i><a>Message</a>
+          </div>
+          <div class="nav-button">
+            <i class="fas fa-magic"></i><a href="http://localhost:3000/post">Create Post</a>
+          </div>
+          <hr>
+    
+          <div id="nav-content-highlight"></div>
+        </div>
+        <input id="nav-footer-toggle" type="checkbox">
+        <div id="nav-footer">
+          <div id="nav-footer-heading">
+            <div id="nav-footer-avatar">
+              <img src="https://gravatar.com/avatar/4474ca42d303761c2901fa819c4f2547">
+            </div>
+            <div id="nav-footer-titlebox">
+              <a id="nav-footer-title" href="/profile/{{user}}" target="_blank">{{user}}</a>
+            </div>
+    
+          </div>
+        </div>
+      </div>
+      <div class="top-bar">
+    
+        <a id="top-title" href="/" target="_blank">
+          <p>SCRIBBLE</p>
+        </a>
+    
+        <div>
+          <a id="nav-icons" href="/" target="_blank">
+            <i class="fa fa-plus"></i>
+          </a>
+          <a id="nav-icons" href="/" target="_blank">
+            <i class="fa fa-message"></i>
+          </a>
+        </div>
+      </div>
+    
+      </div>
+      <nav class="bottom-bar">
+        <a class="active" href="#">
+          <svg viewBox="0 0 100 100">
+            <g transform="translate(10 5) scale(0.8 0.9)">
+              <path d="M 0 30 v 70 h 100 v -70 l -50 -30 z" stroke="currentColor" stroke-width="10" fill="none"
+                stroke-linejoin="round" stroke-linecap="round" />
+            </g>
+          </svg>
+          <span>
+            Home
+          </span>
+        </a>
+    
+        <a href="#">
+          <svg viewBox="0 0 100 100">
+            <g transform="translate(5 5) scale(0.9 0.9)">
+              <path d="M 50 35 a 20 20 0 0 1 50 0 q 0 25 -50 60 q -50 -35 -50 -60 a 25 25 0 0 1 50 0" stroke="currentColor"
+                stroke-width="10" fill="none" stroke-linejoin="round" stroke-linecap="round" />
+            </g>
+          </svg>
+          <span>
+            Likes
+          </span>
+        </a>
+    
+        <a href="#">
+          <svg viewBox="0 0 100 100">
+            <g transform="translate(5 5) scale(0.9 0.9)">
+              <circle cx="45" cy="38" r="38" stroke="currentColor" stroke-width="10" fill="none" />
+              <line x1="66" y1="65" x2="100" y2="100" stroke="currentColor" stroke-width="10" />
+            </g>
+          </svg>
+          <span>
+            Search
+          </span>
+        </a>
+    
+        <a href="#">
+          <svg viewBox="0 0 100 100">
+            <g transform="translate(5 5) scale(0.9 0.9)">
+              <circle cx="50" cy="35" r="18" stroke="currentColor" stroke-width="10" fill="none" />
+              <rect x="15" y="75" width="70" height="50" rx="25" stroke="currentColor" stroke-width="10" fill="none" />
+            </g>
+          </svg>
+          <span>
+            Profile
+          </span>
+        </a>
+      </nav>    
    
     <div class="container-fluid">
         <div class="row">
-            <nav class="col-md-2 d-none d-md-block sidebar" style="position: fixed;">
+            <!-- <nav class="col-md-2 d-none d-md-block sidebar" style="position: fixed;">
                 <div class="text-center mt-3">
-                    <img src="data:image/{{profile.profileimg}}" alt="Profile Picture" class="profile-pic">
+                    <img src="{{profile.profileimg}}" alt="Profile Picture" class="profile-pic">
                     <h4 class="mt-2"><a href="/profile/{{user}}" style="text-decoration:none;">@{{user}}</a></h4>
                 </div>
                 <ul class="nav flex-column mt-4">
@@ -96,13 +219,13 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/logoutt">
+                        <a class="nav-link" href="/logout">
                             <i class="fa-solid fa-right-from-bracket mr-1"></i> Logout
                         </a>
                     </li>
                 </ul>
-            </nav>
-            {% load static %}
+            </nav> -->
+          
             <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
                 <!-- Your main content goes here -->
                 {% include "edit_profile.html" %}
@@ -144,9 +267,7 @@
                                             <input type="hidden" value="{{user.username}}" name="follower" />
                                             <input type="hidden" value="{{user_object.username}}" name="user" />
                                             <button type="submit" class="btn btn-outline-dark"
-                                                data-mdb-ripple-color="dark" style="z-index: 1; margin: 5px;"
-                                                data-bs-toggle="modal" data-bs-target="#exampleModal1"
-                                                data-bs-whatever="@getbootstrap">
+                                                data-mdb-ripple-color="dark" style="z-index: 1; margin: 5px;">
                                                 {{follow_unfollow}}
                                             </button>
 
@@ -188,7 +309,7 @@
                                         <div class="image-grid">
                                             {% for pos in user_posts %}
                                             <div class="card image-item">
-                                                <img src="{{pos.image.url}}" class="card-img-top" alt="..."
+                                                <img src="{{pos.image_url}}" class="card-img-top" alt="..."
                                                     style="width: 219px;height: 219px;">
 
                                                 <div class="card-body">
@@ -220,7 +341,7 @@
         </div>
     </div>
 
-    <script src="{% static 'js/app.js'%}"></script>
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>

@@ -244,45 +244,6 @@ def edit(request,id_user):
             user_profile.bio = bio
             user_profile.location = location
             user_profile.save()
-            
-
-      
-            # if request.FILES.get('image') != None:
-          
-            #  bio = request.POST['bio']
-            #  location = request.POST['location']
-
-            #  user_profile.profileimg = image
-            #  user_profile.bio = bio
-            #  user_profile.location = location
-            #  user_profile.save()
-            #  user_profile = Profile.objects.get(user=user_object)
-            #  user_posts = Post.objects.filter(user=user_object).order_by('-created_at')
-            #  user_post_length = len(user_posts)
-             
-            #  follower = request.user.username
-            #  user = id_user
-            
-            #  if Followers.objects.filter(follower=follower, user=user).first():
-            #    follow_unfollow = 'Unfollow'
-            #  else:
-            #    follow_unfollow = 'Follow'
-            #  user_followers = len(Followers.objects.filter(user=id_user))
-            #  user_following = len(Followers.objects.filter(follower=id_user))
-
-            # context = {
-            #       'user_object': user_object,
-            #       'user_profile': user_profile,
-            #       'user_posts': user_posts,
-            #       'user_post_length': user_post_length,
-            #       'profile': profile,
-            #       'follow_unfollow':follow_unfollow,
-            #       'user_followers': user_followers,
-            #       'user_following': user_following,
-            #    }
-    
-    
-            
             return redirect( '/profile/'+id_user)
 
 

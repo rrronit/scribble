@@ -20,6 +20,10 @@ def index(req):
     print(user)
     if user.is_authenticated:
         posts=Post.objects.all()
+
+        #Get like status each post
+        for post in posts:
+            post.is_liked = Like.objects.filter(post=post, user=user).exists()
         params={"posts":posts}
         return render(req,"homepage.html",params)
     return render(req,"account/login.html")
@@ -66,6 +70,7 @@ def likeImage(req):
         
         if post:
             like_exists = Like.objects.filter(post=post, user=user).exists()
+           
             
             if like_exists:
                 img=Like.objects.filter(post=post, user=user).delete()

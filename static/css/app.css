@@ -11,8 +11,8 @@
   body {
     margin: 0;
     padding: 0;
-    background: var(--background);
-   
+    background: #202331;
+
   }
   
   
@@ -412,6 +412,7 @@
   
   
   .bottom-bar {
+    z-index: 10;
     display: none;
     background: #fff;
     padding: 2rem 0rem;
@@ -499,10 +500,15 @@
   
   .top-bar{
     display: none;
+    z-index: 10;
    
    }
    
    @media (max-width: 800px) {
+    .gradient-custom-2{
+      width: 100vw !important;
+      translate: 7px;
+    }
     #nav-bar{
      display: none;
     }

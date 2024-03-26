@@ -131,3 +131,19 @@ def savePost(request):
             return JsonResponse({'status': 'success'})
     else:
         return JsonResponse({'error': 'Invalid request method'}, status=405)
+    
+    
+from django.db.models import Q
+
+@csrf_exempt
+def searchUser(req):
+    userToSearch=json.loads(req.body)["user"]
+    print(userToSearch)
+    users = list(User.objects.filter(Q(username__contains=userToSearch) | Q(email__contains=userToSearch)).values())
+    
+    params = {
+        'users': users
+    }
+
+    
+    return JsonResponse(params)

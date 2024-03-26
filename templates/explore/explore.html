@@ -63,6 +63,7 @@
       .container {
         translate: -20px;
         max-width: 100vw;
+        margin-top: 120px;
 
         overflow-x: hidden;
       }
@@ -568,20 +569,15 @@
         color: inherit;
         text-decoration: none;
         margin: 0 0.2rem;
-        /* display the svg icon and span elements side by side, vertically aligned */
         display: flex;
         align-items: center;
-        /* include padding for the background applied on the active item */
         padding: 0.75rem 1.25rem;
         border-radius: 30px;
-        /* position relative for the pseudo element */
         position: relative;
-        /* custom properties for the colors picked up by the elements when clicked (and updated for each link in the script) */
-        --hover-bg: #5b37b720;
-        --hover-c: #5b37b7;
+        --hover-bg: #ff00b320;
+        --hover-c: #C9379D,
       }
 
-      /* include considerable negative margin to have the svg icon overlapping with the span element */
       a svg {
         margin-right: -2.5rem;
         width: 28px;
@@ -622,7 +618,6 @@
         opacity: 0;
         visibility: hidden;
         transform: translate(0%, -50%) scale(2);
-        /* transition only when the class is applied */
         transition: all 0.4s ease-out;
       }
 
@@ -728,6 +723,71 @@
       align-items: center;
       justify-content: space-between;
     }
+
+    #search-input {
+      width: 100%;
+      height: 30px;
+    }
+
+    .search-btn {
+
+      width: 100px;
+
+
+    }
+
+    /* Style for user elements */
+    .user {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+      padding: 10px;
+      border-radius: 8px;
+      background-color: rgb(146, 146, 146);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: background-color 0.3s ease;
+    }
+
+    /* Hover effect for user elements */
+    .user:hover {
+      background-color: #1e2b38;
+    }
+
+    /* Style for profile pictures */
+    .profile-picture {
+      width: 50px;
+      /* Set the width of the profile picture */
+      height: 50px;
+      /* Set the height of the profile picture */
+      border-radius: 50%;
+      /* Make the profile picture round */
+      margin-right: 15px;
+      /* Add some space between the profile picture and username */
+      border: 2px solid #fff;
+      /* Add a border around the profile picture */
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .username {
+      font-size: 18px;
+      font-weight: bold;
+      color: white;
+    }
+
+
+    .search-container {
+      display: flex;
+      gap: 10px;
+    }
+
+    #search-results {
+      background-color: #2c3e50;
+      position: absolute;
+      width: 89.5%;
+      top: 80px;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
   </style>
 </head>
 
@@ -751,7 +811,7 @@
 
   </div>
   <nav class="bottom-bar">
-    <a class="active" href="#">
+    <a href="/">
       <svg viewBox="0 0 100 100">
         <g transform="translate(10 5) scale(0.8 0.9)">
           <path d="M 0 30 v 70 h 100 v -70 l -50 -30 z" stroke="currentColor" stroke-width="10" fill="none"
@@ -763,7 +823,7 @@
       </span>
     </a>
 
-    <a href="#">
+    <a   href="/likes">
       <svg viewBox="0 0 100 100">
         <g transform="translate(5 5) scale(0.9 0.9)">
           <path d="M 50 35 a 20 20 0 0 1 50 0 q 0 25 -50 60 q -50 -35 -50 -60 a 25 25 0 0 1 50 0" stroke="currentColor"
@@ -775,7 +835,7 @@
       </span>
     </a>
 
-    <a href="#">
+    <a class="active" href="/explore">
       <svg viewBox="0 0 100 100">
         <g transform="translate(5 5) scale(0.9 0.9)">
           <circle cx="45" cy="38" r="38" stroke="currentColor" stroke-width="10" fill="none" />
@@ -787,7 +847,7 @@
       </span>
     </a>
 
-    <a href="/profile/qwert">
+    <a href="/profile/{{user}}">
       <svg viewBox="0 0 100 100">
         <g transform="translate(5 5) scale(0.9 0.9)">
           <circle cx="50" cy="35" r="18" stroke="currentColor" stroke-width="10" fill="none" />
@@ -857,6 +917,13 @@
 
 
     <div class="container">
+      <div class="search-container">
+        <input type="text" placeholder="Search by Username or Email:" id="search-input" name="user">
+        <button class="search-btn" onclick="searchUser()">Search</button>
+        <div id="search-results">
+        </div>
+      </div>
+
       <h1 style="color: white;">Explore</h1>
       <div class="post-grid">
         {% for post in posts %}
@@ -886,6 +953,79 @@
       </div>
     </div>
   </div>
+
+  <script>
+
+
+    function searchUser() {
+      var userInput = document.getElementById("search-input").value;
+
+      fetch("/search-user", {
+        method: "POST",
+        body: JSON.stringify({ user: userInput }),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => displayResults(data))
+        .catch(error => console.error("Error:", error));
+    }
+    function displayResults(results) {
+      var container = document.getElementById("search-results");
+      container.innerHTML = "";
+
+      var users = results.users;
+      console.log(users)
+
+      if (users.length > 0) {
+
+        users.forEach(function (user) {
+
+          var userDiv = document.createElement("div");
+          userDiv.classList.add("user");
+
+          var img = document.createElement("img");
+          img.src = user.profile_pic_url;
+          img.alt = "Profile Picture";
+          img.classList.add("profile-picture");
+
+          var usernameSpan = document.createElement("span");
+          usernameSpan.textContent = user.username;
+          usernameSpan.classList.add("username");
+
+          userDiv.appendChild(img);
+          userDiv.appendChild(usernameSpan);
+
+          container.appendChild(userDiv);
+        });
+      }
+      else {
+        var userDiv = document.createElement("div");
+        userDiv.innerText = "No User found"
+        container.appendChild(userDiv);
+
+
+      }
+    }
+
+  </script>
+  <script>
+    window.addEventListener("mousedown", (e) => {
+      if (!e.target.parentElement.classList.contains("search-result") ||
+        !e.target.parentElement.classList.contains("search-container")) {
+        var container = document.getElementById("search-results");
+        container.innerHTML = "";
+      }
+      console.log(e.target.parentElement.classList)
+    });
+
+  </script>
 </body>
 
 </html>

@@ -7,9 +7,11 @@ from supabase import create_client
 import base64
 from django.http import JsonResponse
 from .models import Post, Like
+from account.models import Profile
 from django.shortcuts import get_object_or_404
 import uuid
 import json
+import random
 
 supabaseUrl = "https://dnltmfhvtgzozvroiwor.supabase.co"
 supabasekey="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRubHRtZmh2dGd6b3p2cm9pd29yIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcwNzMxNzQ0NCwiZXhwIjoyMDIyODkzNDQ0fQ.UeEyCm9MCEheJ9ZElyJoX1ywcdXEJvv3jhH6n8QvZ4E"
@@ -17,14 +19,23 @@ supabase=create_client(supabaseUrl,supabasekey)
 
 def index(req):
     user=req.user
-    print(user)
     if user.is_authenticated:
         posts=Post.objects.all()
-
-        #Get like status each post
+        all_users = User.objects.all()
+        suggestions = random.sample(list(all_users), min(len(all_users),8))
+        
+        
         for post in posts:
             post.is_liked = Like.objects.filter(post=post, user=user).exists()
-        params={"posts":posts}
+            post.profile_url=Profile.objects.get(user=post.user).profileimg
+            
+        for suggestion in suggestions:
+            suggestion.profile_url=Profile.objects.get(user=suggestion).profileimg
+            
+        params = {
+            "posts": posts,
+            "suggestions": suggestions
+        }
         return render(req,"homepage.html",params)
     return render(req,"account/login.html")
     
@@ -32,11 +43,11 @@ def index(req):
 
 @csrf_exempt
 def createPost(req):
-    user=User.objects.all()[0]
-    image=req.body
-    image=image.decode("utf-8")
+    user=req.user
+    data=json.loads(req.body)
+    image=data["image"]
     base64_image = image.split(',')[1]
-    binary_image = base64.b64decode(base64_image)
+    binary_image = base64.b64decode(base64_image)   
     storage = supabase.storage.from_("scribble")
     file_name=str(uuid.uuid4())
     file_path="Post/"+file_name+".jpg"
@@ -133,14 +144,16 @@ def savePost(request):
         return JsonResponse({'error': 'Invalid request method'}, status=405)
     
     
-from django.db.models import Q
+from django.db.models import Q,F
 
 @csrf_exempt
 def searchUser(req):
     userToSearch=json.loads(req.body)["user"]
-    print(userToSearch)
-    users = list(User.objects.filter(Q(username__contains=userToSearch) | Q(email__contains=userToSearch)).values())
-    
+ 
+    users = User.objects.filter(Q(username__contains=userToSearch) | Q(email__contains=userToSearch))
+    users = users.annotate(profile_url=F('profile__profileimg'))
+   
+    users=list(users.values())
     params = {
         'users': users
     }

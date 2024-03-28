@@ -1,30 +1,19 @@
-
 'use client'
-
-import { MouseEventHandler, useState } from 'react'
+import { MouseEventHandler, useState, useEffect, SetStateAction, Dispatch } from 'react'
 import { Excalidraw, exportToBlob, serializeAsJSON } from "@excalidraw/excalidraw"
 import * as fal from "@fal-ai/serverless-client"
-import Image from 'next/image'
-import { useRouter} from 'next/navigation'
+import Image, { StaticImageData } from 'next/image'
+import { useRouter } from 'next/navigation'
 
-
-fal.config({
-  proxyUrl: "/api/fal/proxy",
-})
-
+fal.config({ proxyUrl: "/api/fal/proxy", })
 const seed = Math.floor(Math.random() * 100000)
-const baseArgs = {
-  sync_mode: true,
-  strength: .99,
-  seed
-}
-const ExcalidrawWrapper: React.FC = () => {
+const baseArgs = { sync_mode: true, strength: .99, seed }
+
+const ExcalidrawWrapper: React.FC<{ img: StaticImageData|string; setImage: Dispatch<SetStateAction<StaticImageData|string>> }> = ({ img, setImage })  => {
   const [input, setInput] = useState('masterpiece')
-  const [image, setImage] = useState(localStorage.getItem("image") as string)
   const [sceneData, setSceneData] = useState<any>(null)
   const [excalidrawAPI, setExcalidrawAPI] = useState<any>(null)
   const [_appState, setAppState] = useState<any>(null)
-
   const { send } = fal.realtime.connect('110602490-sdxl-turbo-realtime', {
     connectionKey: 'scribble-post',
     onResult(result) {
@@ -32,6 +21,8 @@ const ExcalidrawWrapper: React.FC = () => {
       setImage(result.images[0].url)
     }
   })
+
+  const [canvasSize, setCanvasSize] = useState({ width: 450, height: 450 })
 
   async function getDataUrl(appState = _appState) {
     const elements = excalidrawAPI.getSceneElements()
@@ -42,33 +33,41 @@ const ExcalidrawWrapper: React.FC = () => {
       appState,
       quality: 0.5,
       files: excalidrawAPI.getFiles(),
-      getDimensions: () => { return { width: 450, height: 450 } }
+      getDimensions: () => canvasSize
     })
-    return await new Promise(r => { let a = new FileReader(); a.onload = r; a.readAsDataURL(blob) }).then((e: any) => e.target.result)
+    return await new Promise(r => {
+      let a = new FileReader();
+      a.onload = r;
+      a.readAsDataURL(blob)
+    }).then((e: any) => e.target.result)
   }
-const router=useRouter()
-  function handlepost(event: any): void {
-    localStorage.setItem("image",image)
-    router.push("post/create")      
-  }
-  return (
-    <main className="p-12">
 
+
+  useEffect(() => {
+    const updateCanvasSize = () => {
+      const width = window.innerWidth > 550 ? 550 : window.innerWidth - 32;
+      const height = width;
+      setCanvasSize({ width, height });
+    };
+
+    updateCanvasSize();
+    window.addEventListener('resize', updateCanvasSize);
+    return () => window.removeEventListener('resize', updateCanvasSize);
+  }, []);
+
+  return (
+    <main className="p-4 md:p-1 mx-auto ">
       <input
-        className='border text-black rounded-lg p-2 w-full mb-2'
+        className="border text-black rounded-lg p-2 w-full mb-2"
         value={input}
         onChange={async (e) => {
           setInput(e.target.value)
           let dataUrl = await getDataUrl()
-          send({
-            ...baseArgs,
-            prompt: e.target.value,
-            image_url: dataUrl
-          })
+          send({ ...baseArgs, prompt: e.target.value, image_url: dataUrl })
         }}
       />
-      <div className='flex'>
-        <div className="w-[550px] h-[570px]">
+      <div className="flex  flex-col md:flex-row items-center justify-center">
+        <div className="w-full md:w-[550px] h-[350px] md:h-[550px] ">
           <Excalidraw
             excalidrawAPI={(api) => setExcalidrawAPI(api)}
             onChange={async (elements, appState) => {
@@ -81,31 +80,27 @@ const router=useRouter()
               if (newSceneData !== sceneData) {
                 setAppState(appState)
                 setSceneData(newSceneData)
+            
                 let dataUrl = await getDataUrl(appState)
-                send({
-                  ...baseArgs,
-                  image_url: dataUrl,
-                  prompt: input,
-                })
+                send({ ...baseArgs, image_url: dataUrl, prompt: input })
               }
             }}
           />
         </div>
-        {
-          image && (
-            <Image
-              src={image}
+   
+          <div className="w-full bg-contain md:w-[550px] h-[350px] md:h-[570px] mt-5 ml-2">
+            <Image 
+              src={img}
               width={550}
-              height={550}
-              alt='fal image'
+              height={350}
+              className='bg-contain'
+              alt="fal image"
             />
-          )
-        }
-      </div>
-      <div>
-        <button onClick={handlepost} className=' p-10 bg-blue-500 font '> POST</button>
+          </div>
+    
       </div>
     </main>
   )
 }
-export default ExcalidrawWrapper;
+
+export default ExcalidrawWrapper

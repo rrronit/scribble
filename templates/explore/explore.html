@@ -5,7 +5,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Explore</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -19,7 +21,7 @@
       margin: 0 auto;
       padding: 20px;
       translate: 140px;
-
+      width: 70%;
 
 
     }
@@ -736,35 +738,27 @@
 
     }
 
-    /* Style for user elements */
     .user {
       display: flex;
       align-items: center;
       margin-bottom: 20px;
       padding: 10px;
       border-radius: 8px;
-      background-color: rgb(146, 146, 146);
+      background-color: rgba(146, 146, 146, 0.26);
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       transition: background-color 0.3s ease;
     }
 
-    /* Hover effect for user elements */
     .user:hover {
       background-color: #1e2b38;
     }
 
-    /* Style for profile pictures */
     .profile-picture {
       width: 50px;
-      /* Set the width of the profile picture */
       height: 50px;
-      /* Set the height of the profile picture */
       border-radius: 50%;
-      /* Make the profile picture round */
       margin-right: 15px;
-      /* Add some space between the profile picture and username */
       border: 2px solid #fff;
-      /* Add a border around the profile picture */
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
@@ -823,7 +817,7 @@
       </span>
     </a>
 
-    <a   href="/likes">
+    <a href="/likes">
       <svg viewBox="0 0 100 100">
         <g transform="translate(5 5) scale(0.9 0.9)">
           <path d="M 50 35 a 20 20 0 0 1 50 0 q 0 25 -50 60 q -50 -35 -50 -60 a 25 25 0 0 1 50 0" stroke="currentColor"
@@ -977,37 +971,40 @@
         .catch(error => console.error("Error:", error));
     }
     function displayResults(results) {
-      var container = document.getElementById("search-results");
-      container.innerHTML = "";
+      var container = document.querySelector(".container");
+
+      container.innerHTML = `
+      <div class="search-container">
+        <input type="text" placeholder="Search by Username or Email:" id="search-input" name="user">
+        <button class="search-btn" onclick="searchUser()">Search</button>
+        <div id="search-results">
+        </div>
+      </div>
+      <h1 style="color: white;">Search Result</h1>`;
 
       var users = results.users;
-      console.log(users)
 
       if (users.length > 0) {
 
         users.forEach(function (user) {
+          console.log(user)
 
           var userDiv = document.createElement("div");
           userDiv.classList.add("user");
-
-          var img = document.createElement("img");
-          img.src = user.profile_pic_url;
-          img.alt = "Profile Picture";
-          img.classList.add("profile-picture");
-
-          var usernameSpan = document.createElement("span");
-          usernameSpan.textContent = user.username;
-          usernameSpan.classList.add("username");
-
-          userDiv.appendChild(img);
-          userDiv.appendChild(usernameSpan);
+          userDiv.innerHTML = `
+          <a href="/profile/${user.username}">
+          <img class="profile-picture" src="${user.profile_url}"/>
+          <span class="username" > ${user.username} </span>
+          </a>
+          `
 
           container.appendChild(userDiv);
         });
       }
       else {
         var userDiv = document.createElement("div");
-        userDiv.innerText = "No User found"
+        userDiv.style.color="white"
+        userDiv.innerText = " No User found"
         container.appendChild(userDiv);
 
 
@@ -1015,17 +1012,7 @@
     }
 
   </script>
-  <script>
-    window.addEventListener("mousedown", (e) => {
-      if (!e.target.parentElement.classList.contains("search-result") ||
-        !e.target.parentElement.classList.contains("search-container")) {
-        var container = document.getElementById("search-results");
-        container.innerHTML = "";
-      }
-      console.log(e.target.parentElement.classList)
-    });
 
-  </script>
 </body>
 
 </html>

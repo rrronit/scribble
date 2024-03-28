@@ -69,8 +69,9 @@ def likeImage(req):
         user = req.user
         data = json.loads(req.body)
         print("#############################",data)
-        img_id =data['imgId']  
-     
+        img_id =data['imgId'] 
+        print(img_id) 
+        
         post = get_object_or_404(Post, pk=img_id)
         
         if post:
@@ -157,4 +158,20 @@ def savePost(req):
             post.save()
             return JsonResponse({'status': 'saved'})
     else:
-        return JsonResponse({'error': 'Invalid request method'}, status=405)    
+        return JsonResponse({'error': 'Invalid request method'}, status=405)
+    
+    
+from django.db.models import Q
+
+@csrf_exempt
+def searchUser(req):
+    userToSearch=json.loads(req.body)["user"]
+    print(userToSearch)
+    users = list(User.objects.filter(Q(username__contains=userToSearch) | Q(email__contains=userToSearch)).values())
+    
+    params = {
+        'users': users
+    }
+
+    
+    return JsonResponse(params)

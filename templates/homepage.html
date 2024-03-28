@@ -13,7 +13,27 @@
     integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
+<style>
+  .suggestions{
+    height: 100px;
+    width: 100px;
+    background: white;
+    position: fixed;
+    z-index: 1000;
+    width: 400px;
+    height: 98vh;
+    top: 20px;
+    right: 20px;
+    border-radius: 20px;
+  }
+  
+@media (max-width: 1250px) {
 
+  .suggestions{
+    display: none;
+  }
+}
+</style>
 <body>
   <div id="nav-bar">
     <input id="nav-toggle" type="checkbox">
@@ -26,31 +46,33 @@
       </label>
       <hr>
     </div>
-    <div id="nav-content">
+    <div id="nav-content"><a href="#">
       <div class="nav-button">
-        <i class="fas fa-palette"></i><a>Home</a>
-      </div>
+        <i class="fas fa-palette"></i>Home
+      </div></a>
 
       <a href="explore/">
       <div class="nav-button">
         <i class="fas fa-images"></i>Explore
       </div>
     </a>
-
+    <a href="/savedPost/">
       <div class="nav-button">
-        <i class="fas fa-thumbtack"></i><a>Saved Post</a>
+        <i class="fas fa-thumbtack"></i>Saved Post
       </div>
+    </a>
       <hr>
 
-      <a>
+      <a href="/likedPost/">
       <div class="nav-button">
         <i class="fas fa-heart"></i>Like
       </div>
     </a>
-
+    <a href="/trending/">
       <div class="nav-button">
-        <i class="fas fa-chart-line"></i><a>Trending</a>
+        <i class="fas fa-chart-line"></i>Trending
       </div>
+    </a>
 
       <a href="/message/">
       <div class="nav-button">
@@ -81,15 +103,13 @@
   </div>
   <div class="top-bar">
 
-    <a id="top-title" href="/" target="_blank">
+    <a id="top-title" href="/" >
       <p>SCRIBBLE</p>
     </a>
 
     <div>
-      <a id="nav-icons" href="/" target="_blank">
-        <i class="fa fa-plus"></i>
-      </a>
-      <a id="nav-icons" href="/" target="_blank">
+  
+      <a id="nav-icons" href="/message/" >
         <i class="fa fa-message"></i>
       </a>
     </div>
@@ -97,7 +117,7 @@
 
   </div>
   <nav class="bottom-bar">
-    <a class="active" href="#">
+    <a class="active" href="/">
       <svg viewBox="0 0 100 100">
         <g transform="translate(10 5) scale(0.8 0.9)">
           <path d="M 0 30 v 70 h 100 v -70 l -50 -30 z" stroke="currentColor" stroke-width="10" fill="none"
@@ -109,7 +129,7 @@
       </span>
     </a>
 
-    <a href="#">
+    <a href="/likedPost/">
       <svg viewBox="0 0 100 100">
         <g transform="translate(5 5) scale(0.9 0.9)">
           <path d="M 50 35 a 20 20 0 0 1 50 0 q 0 25 -50 60 q -50 -35 -50 -60 a 25 25 0 0 1 50 0" stroke="currentColor"
@@ -121,7 +141,7 @@
       </span>
     </a>
 
-    <a href="#">
+    <a href="/explore/">
       <svg viewBox="0 0 100 100">
         <g transform="translate(5 5) scale(0.9 0.9)">
           <circle cx="45" cy="38" r="38" stroke="currentColor" stroke-width="10" fill="none" />
@@ -133,7 +153,7 @@
       </span>
     </a>
 
-    <a href="#">
+    <a href="/profile/{{user}}">
       <svg viewBox="0 0 100 100">
         <g transform="translate(5 5) scale(0.9 0.9)">
           <circle cx="50" cy="35" r="18" stroke="currentColor" stroke-width="10" fill="none" />
@@ -239,6 +259,13 @@
 
       </div>
     </div>
+    {% endfor %}
+    
+  </div>
+  <div class="suggestions">
+    <center><h1>YOUR SUGGESTIONS</h1></center>
+    {% for users in suggestions %}
+
 
     {% endfor %}
 
@@ -252,7 +279,7 @@
     <div class="allComment">
     
     </div>
-      <input type="text" id="commentContent" placeholder="Enter your comment...">
+      <input type="text" id="commentContent" required placeholder="Enter your comment...">
       <input type="button" onclick="send_comment()" value="Submit">
   </div>
   </div>
@@ -274,60 +301,6 @@
 
       }
     });
-  </script>
-
-  <script>
-    const navigationOptions = [
-      {
-        name: 'home',
-        color: '#5B37B7',
-        bg: "#332968"
-
-      },
-      {
-        name: 'likes',
-        color: '#C9379D',
-        bg: "#aa0084"
-
-      },
-      {
-        name: 'search',
-        color: '#E6A919',
-        bg: "#d67700"
-      },
-      {
-        name: 'profile',
-        color: '#1892A6',
-        bg: "#007179"
-      }
-    ];
-
-    const links = document.querySelectorAll('nav a');
-
-    function handleClick(e) {
-      e.preventDefault();
-      links.forEach(link => {
-        if (link.classList.contains('active')) {
-          link.classList.remove('active');
-        }
-      });
-
-      const name = this.textContent.trim().toLowerCase();
-      const { color, bg } = navigationOptions.find(item => item.name === name);
-
-      const style = window.getComputedStyle(this);
-      const hoverColor = style.getPropertyValue('--hover-c');
-      if (color !== hoverColor) {
-        this.style.setProperty('--hover-bg', `${color}20`);
-        this.style.setProperty('--hover-c', color);
-      }
-
-      this.classList.add('active');
-      document.querySelector('body').style.background = color;
-      document.querySelector(".top-bar").style.background = bg
-    }
-
-    links.forEach(link => link.addEventListener('click', handleClick));
   </script>
 
   <script>
@@ -435,32 +408,41 @@
     //Comment
     const comment=async(id)=>{
    const commentBox=document.getElementById('commentBox');
-   console.log(commentBox)
+   const cont=document.querySelector(".allComment")
+  
    window.location.href = window.location.pathname +"#"+id;
-   console.log(commentBox.style)
+   
      
-      console.log()
+     
       commentBox.style.display = 'flex';
       //get req
-      const res = await fetch('get_comment/'+id, {method: 'GET',})
+      const res = await fetch('/get_comment/'+id, {method: 'GET',})
+
       const data= await res.json()
-      console.log(data)
-      const cont=document.querySelector(".allComment")
-      cont.innerHTML=""
-      data.comments.forEach((i)=>{
-        cont.innerHTML+=`<div class="comment">
-        <p class="commentUser">${i.username}</p>
-        <p class="commentUsercontent">${i.content}</p> 
-        </div>`
-         }
-         )
-      
+
+      if (data.comments.length == 0) {
+        cont.innerHTML = "<p>No comments yet.</p>";
+    }
+    else {
+        cont.innerHTML = "";
+        data.comments.forEach((i) => {
+            cont.innerHTML += `<div class="comment">
+            <p class="commentUser">${i.username}</p>
+            <p class="commentUsercontent">${i.content}</p> 
+            </div>`;
+        });
+    }
+
+         cont.lastElementChild.scrollIntoView({ behavior: 'smooth', block: 'end' });
     } 
     const send_comment=async()=>{
       //get id from url
       const id=(parseInt(window.location.hash.replace("#","")))
       const content=document.querySelector("#commentContent")
-      const res = await fetch('add-comment', {
+      if (content.value==""){
+        return
+      }
+      const res = await fetch('/add-comment', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -468,8 +450,11 @@
             body: JSON.stringify({ postId: id,content:content.value }),
         });
         const data=await res.json()
-        
-        document.querySelector(".allComment").innerHTML+=`<div class="comment">
+        const container=document.querySelector(".allComment")
+        if (container.firstChild.innerText==="No comments yet."){ 
+          container.innerHTML=""
+        }
+        container.innerHTML+=`<div class="comment">
         <p class="commentUser">${data.comment.user}</p>
         <p class="commentUsercontent">${data.comment.content}</p> 
         </div>`
@@ -488,6 +473,7 @@
     }
     // Add event listener to the close button
     closeBtn.addEventListener('click', hideCommentBox);
+
 
   </script>
 </body>

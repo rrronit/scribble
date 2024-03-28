@@ -13,6 +13,7 @@ body {
   margin: 0;
   padding: 0;
   background: var(--background);
+  font-family: "Open Sans", sans-serif;
  
 }
 
@@ -528,7 +529,7 @@ label[for="nav-footer-toggle"] {
  }
 
 .album{
-  
+  max-width: max-content !important;
   margin-left: 20px !important;
 } 
 .posts{
@@ -713,7 +714,7 @@ label[for="nav-footer-toggle"] {
 .album {
   padding-top: 20px;
   margin: 20px 20px 0 120px;
-  max-width: 100%;
+  max-width: 61%;
   background-color: rgba(214, 214, 214, 0.596);
   transition: margin 0.2s ease;
   border-radius: 20px;
@@ -721,6 +722,8 @@ label[for="nav-footer-toggle"] {
     border: none;
     display: flex;
   }
+
+  
 
   .intro-menu {
     margin-bottom: auto;
@@ -873,8 +876,8 @@ label[for="nav-footer-toggle"] {
 .closeBtn {
   position: absolute; /* Positions the close button relative to .for-style */
   top: 10px;
-  right: 10px;
-  font-size: 24px;
+  right: 1px;
+  font-size: 28px;
   font-weight: bold;
   cursor: pointer;
   color: #999;

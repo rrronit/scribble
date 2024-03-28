@@ -6,4 +6,4 @@ python_dotenv
 supabase
 daphne
 channels_redis
-
+django-filter

@@ -18,6 +18,7 @@ const ExcalidrawWrapper: React.FC<{ img: StaticImageData|string; setImage: Dispa
     connectionKey: 'scribble-post',
     onResult(result) {
       if (result.error) return
+      console.log(img)
       setImage(result.images[0].url)
     }
   })

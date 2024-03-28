@@ -413,29 +413,26 @@ label[for="nav-footer-toggle"] {
 
 
 .bottom-bar {
-  display: none;
-  background: #fff;
-  padding: 2rem 0rem;
-  box-shadow: 0 1px 15px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+      display: none;
+      background: #fff;
+      padding: 2rem 0rem;
+      box-shadow: 0 1px 15px rgba(0, 0, 0, 0.1);
+      position: sticky;
 
   a {
     color: inherit;
     text-decoration: none;
     margin: 0 0.2rem;
-    /* display the svg icon and span elements side by side, vertically aligned */
     display: flex;
     align-items: center;
-    /* include padding for the background applied on the active item */
     padding: 0.75rem 1.25rem;
     border-radius: 30px;
-    /* position relative for the pseudo element */
     position: relative;
-    /* custom properties for the colors picked up by the elements when clicked (and updated for each link in the script) */
-    --hover-bg: #5b37b720;
-    --hover-c: #5b37b7;
+    --hover-bg: #ff00b320;
+    --hover-c: #C9379D,
   }
 
-  /* include considerable negative margin to have the svg icon overlapping with the span element */
   a svg {
     margin-right: -2.5rem;
     width: 28px;
@@ -494,16 +491,17 @@ label[for="nav-footer-toggle"] {
 
 }
 
-
-
-
-
-.top-bar{
+.top-bar {
   display: none;
- 
- }
+  z-index: 10;
+
+}
  
  @media (max-width: 800px) {
+  .gradient-custom-2 {
+    width: 100vw !important;
+    translate: 7px;
+  }
   #nav-bar{
    display: none;
   }
@@ -564,7 +562,23 @@ label[for="nav-footer-toggle"] {
  }
  }
  
+ .flex-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 
+#search-input {
+  width: 100%;
+  height: 30px;
+}
+
+.search-btn {
+
+  width: 100px;
+
+
+}
 
 
 
@@ -1169,29 +1183,19 @@ a.active {
   color: #2e2e2e;
 }
 
-/* nav {
-  padding: 2.5rem 0 2.5rem 0;
-} */
-/* nav ul {
-  display: flex;
-  justify-content: flex-start;
-} */
+
 @media (min-width: 62rem) {
   nav ul {
     justify-content: flex-end;
   }
 }
-/* nav li {
-  font-size: 1.25rem;
-} */
+
 @media (max-width: 48rem) {
   nav li {
     font-size: 1.1rem;
   }
 }
-/* nav li:nth-child(2) {
-  margin: 0;
-} */
+
 
 #highlight {
   color: #ea8478;
@@ -1363,4 +1367,95 @@ img:hover {
     grid-column-start: span 12;
     grid-column-end: span 12;
   }
+}
+
+
+
+
+
+#commentBox {
+  /* Center vertically and horizontally */
+  display: none;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+}
+
+.for-style {
+  background-color:#202331;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 70vh;
+  width: 70vw;
+  max-width: 800px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  padding: 20px;
+  position: relative; /* Added for positioning the close button */
+}
+
+.closeBtn {
+  position: absolute; /* Positions the close button relative to .for-style */
+  top: 10px;
+  right: 10px;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  color: #999;
+}
+
+.closeBtn:hover {
+  color: #666;
+}
+
+#commentContent {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-bottom: 10px; /* Add some space between input and button */
+}
+
+input[type="button"] {
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+}
+.allComment {
+  color: whitesmoke;
+  flex-grow: 1;
+  width: 100%;
+  overflow-y: auto;
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Add some spacing between comments */
+}
+
+.comment {
+  background-color:#18283b;
+  padding: 10px;
+  border-radius: 4px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.commentUser {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.commentUsercontent {
+  margin: 0;
+}
+.posts{
+  margin-top: 120px;
 }

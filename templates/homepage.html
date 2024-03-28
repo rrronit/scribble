@@ -77,13 +77,103 @@
     text-decoration: none;
     color: inherit;
   }
+
+  #commentBox {
+    /* Center vertically and horizontally */
+    display: none;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    background-color: rgba(0, 0, 0, 0.5);
+    /* Semi-transparent background */
+  }
+
+  .for-style {
+    background-color: #202331;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 70vh;
+    width: 70vw;
+    max-width: 800px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    padding: 20px;
+    position: relative;
+    /* Added for positioning the close button */
+  }
+
+  .closeBtn {
+    position: absolute;
+    /* Positions the close button relative to .for-style */
+    top: 10px;
+    right: 1px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #999;
+  }
+
+  .closeBtn:hover {
+    color: #666;
+  }
+
+  #commentContent {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    /* Add some space between input and button */
+  }
+
+  input[type="button"] {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+  }
+
+  .allComment {
+    color: whitesmoke;
+    flex-grow: 1;
+    width: 100%;
+    overflow-y: auto;
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    /* Add some spacing between comments */
+  }
+
+  .comment {
+    background-color: #18283b;
+    padding: 10px;
+    border-radius: 4px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+
+  .commentUser {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+
+  .commentUsercontent {
+    margin: 0;
+  }
 </style>
 
 <body>
   <div id="nav-bar">
     <input id="nav-toggle" type="checkbox">
     <div id="nav-header">
-      <a id="nav-title" href="/" target="_blank">
+      <a id="nav-title" href="/" >
         SCRIBBLE
       </a>
       <label for="nav-toggle">
@@ -92,43 +182,46 @@
       <hr>
     </div>
     <div id="nav-content">
-      <a href="">
+      <a href="/">
         <div class="nav-button">
           <i class="fas fa-palette"></i>Home
         </div>
       </a>
-      <a href="explore/">
+
+      <a href="/explore">
         <div class="nav-button">
           <i class="fas fa-images"></i>Explore
         </div>
       </a>
-      <a href="/saved">
+      <a href="/savedPost/">
         <div class="nav-button">
           <i class="fas fa-thumbtack"></i>Saved Post
         </div>
       </a>
       <hr>
-      <a href="liked">
+
+      <a href="/likedPost/">
         <div class="nav-button">
           <i class="fas fa-heart"></i>Like
         </div>
       </a>
-      <a href="trending">
+      <a href="/trending/">
         <div class="nav-button">
           <i class="fas fa-chart-line"></i>Trending
         </div>
       </a>
-      <a href="message/">
-      <div class="nav-button">
-        <i class="fas fa-fire"></i>Message
-      </div>
+
+      <a href="/message/">
+        <div class="nav-button">
+          <i class="fas fa-fire"></i>Message
+        </div>
       </a>
-      <a href="">
+
+      </a>
       <div class="nav-button">
-        <i class="fas fa-magic"></i><a href="http://localhost:3000/post">Create Post</a>
+        <i class="fas fa-magic"></i><a href="/post">Create Post</a>
       </div>
       <hr>
-      </a>
 
       <div id="nav-content-highlight"></div>
     </div>
@@ -136,7 +229,7 @@
     <div id="nav-footer">
       <div id="nav-footer-heading">
         <div id="nav-footer-avatar">
-          <img src="{{user.profile_url}}">
+          <img src="{{user.}}">
         </div>
         <div id="nav-footer-titlebox">
           <a id="nav-footer-title" href="/profile/{{user}}" >{{user}}</a>
@@ -226,6 +319,8 @@
           <img src={{post.image_url}} alt="" class="album-photo" />
         </div>
         <div class="album-actions">
+
+          <!-- LIKE -->
           <button onclick="likeImg({{post.id}})" clbuttonss="album-action" class="adding_transparent_background"
             style="background: transparent;border: none;">
             {% if post.is_liked %}
@@ -237,13 +332,11 @@
               <g id="SVGRepo_iconCarrier">
                 <g>
                   <path fill="#394240"
-                    d="M48,5c-4.418,0-8.418,1.793-11.312,4.688L32,14.344l-4.688-4.656C24.418,6.793,20.418,5,16,5 C7.164,5,0,12.164,0,21c0,
-             4.418,2.852,8.543,5.75,11.438l23.422,23.426c1.562,1.562,4.094,1.562,5.656,0L58.188,32.5 C61.086,29.605,64,25.418,64,21C64,12.164,56.836,5,48,
-             5z M32,47.375L11.375,26.75C9.926,25.305,8,23.211,8,21c0-4.418,3.582-8,8-8 c2.211,0,4.211,0.895,5.656,2.344l7.516,7.484c1.562,1.562,4.094,1.562,
-             5.656,0l7.516-7.484C43.789,13.895,45.789,13,48,13 c4.418,0,8,3.582,8,8c0,2.211-1.926,4.305-3.375,5.75L32,47.375z"></path>
-                  <path id="likeButton-{{post.id}}" fill="red"
-                    d="M32,47.375L11.375,26.75C9.926,25.305,8,23.211,8,21c0-4.418,3.582-8,8-8c2.211,0,4.211,0.895,5.656,2.344 l7.516,7.484c1.562,1.562,
-            4.094,1.562,5.656,0l7.516-7.484C43.789,13.895,45.789,13,48,13c4.418,0,8,3.582,8,8 c0,2.211-1.926,4.305-3.375,5.75L32,47.375z"></path>
+                    d="M48,5c-4.418,0-8.418,1.793-11.312,4.688L32,14.344l-4.688-4.656C24.418,6.793,20.418,5,16,5 C7.164,5,0,12.164,0,21c0,4.418,2.852,8.543,5.75,11.438l23.422,23.426c1.562,1.562,4.094,1.562,5.656,0L58.188,32.5 C61.086,29.605,64,25.418,64,21C64,12.164,56.836,5,48,5z M32,47.375L11.375,26.75C9.926,25.305,8,23.211,8,21c0-4.418,3.582-8,8-8 c2.211,0,4.211,0.895,5.656,2.344l7.516,7.484c1.562,1.562,4.094,1.562,5.656,0l7.516-7.484C43.789,13.895,45.789,13,48,13 c4.418,0,8,3.582,8,8c0,2.211-1.926,4.305-3.375,5.75L32,47.375z">
+                  </path>
+                  <path id="likeButton-{{post.id}}" fill="#F76D57"
+                    d="M32,47.375L11.375,26.75C9.926,25.305,8,23.211,8,21c0-4.418,3.582-8,8-8c2.211,0,4.211,0.895,5.656,2.344 l7.516,7.484c1.562,1.562,4.094,1.562,5.656,0l7.516-7.484C43.789,13.895,45.789,13,48,13c4.418,0,8,3.582,8,8 c0,2.211-1.926,4.305-3.375,5.75L32,47.375z">
+                  </path>
                 </g>
               </g>
             </svg>
@@ -256,36 +349,86 @@
               <g id="SVGRepo_iconCarrier">
                 <g>
                   <path fill="#394240"
-                    d="M48,5c-4.418,0-8.418,1.793-11.312,4.688L32,14.344l-4.688-4.656C24.418,6.793,20.418,5,16,5 C7.164,5,0,12.164,0,21c0,
-             4.418,2.852,8.543,5.75,11.438l23.422,23.426c1.562,1.562,4.094,1.562,5.656,0L58.188,32.5 C61.086,29.605,64,25.418,64,21C64,12.164,56.836,5,48,
-             5z M32,47.375L11.375,26.75C9.926,25.305,8,23.211,8,21c0-4.418,3.582-8,8-8 c2.211,0,4.211,0.895,5.656,2.344l7.516,7.484c1.562,1.562,4.094,1.562,
-             5.656,0l7.516-7.484C43.789,13.895,45.789,13,48,13 c4.418,0,8,3.582,8,8c0,2.211-1.926,4.305-3.375,5.75L32,47.375z"></path>
+                    d="M48,5c-4.418,0-8.418,1.793-11.312,4.688L32,14.344l-4.688-4.656C24.418,6.793,20.418,5,16,5 C7.164,5,0,12.164,0,21c0,4.418,2.852,8.543,5.75,11.438l23.422,23.426c1.562,1.562,4.094,1.562,5.656,0L58.188,32.5 C61.086,29.605,64,25.418,64,21C64,12.164,56.836,5,48,5z M32,47.375L11.375,26.75C9.926,25.305,8,23.211,8,21c0-4.418,3.582-8,8-8 c2.211,0,4.211,0.895,5.656,2.344l7.516,7.484c1.562,1.562,4.094,1.562,5.656,0l7.516-7.484C43.789,13.895,45.789,13,48,13 c4.418,0,8,3.582,8,8c0,2.211-1.926,4.305-3.375,5.75L32,47.375z">
+                  </path>
                   <path id="likeButton-{{post.id}}" fill="none"
-                    d="M32,47.375L11.375,26.75C9.926,25.305,8,23.211,8,21c0-4.418,3.582-8,8-8c2.211,0,4.211,0.895,5.656,2.344 l7.516,7.484c1.562,1.562,
-            4.094,1.562,5.656,0l7.516-7.484C43.789,13.895,45.789,13,48,13c4.418,0,8,3.582,8,8 c0,2.211-1.926,4.305-3.375,5.75L32,47.375z"></path>
+                    d="M32,47.375L11.375,26.75C9.926,25.305,8,23.211,8,21c0-4.418,3.582-8,8-8c2.211,0,4.211,0.895,5.656,2.344 l7.516,7.484c1.562,1.562,4.094,1.562,5.656,0l7.516-7.484C43.789,13.895,45.789,13,48,13c4.418,0,8,3.582,8,8 c0,2.211-1.926,4.305-3.375,5.75L32,47.375z">
+                  </path>
                 </g>
               </g>
             </svg>
             {% endif %}
 
 
-            <p id="imglikeCount-{{post.id}}">{{post.like_count}}</p>
+            <p id="imglikeCount-{{post.id}}" style="font-size: 20px;margin: 0;">{{post.like_count}}</p>
           </button>
-          <a href="#" class="album-action">
-            <svg stroke="currentColor" stroke-width="2" fill="red" stroke-linecap="round" stroke-linejoin="round"
-              class="css-i6dzq1" viewBox="0 0 24 24">
-              <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+
+
+          <!-- COMMENT -->
+          <button href="#" class="adding_transparent_background" onclick="comment({{post.id}})"
+            style="background: transparent;border: none;">
+            <svg id="show_comment_box" version="1.0" height="45px" width="45px" id="Layer_1"
+              xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 64 64"
+              enable-background="new 0 0 64 64" xml:space="preserve" fill="#000000">
+              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+              <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+              <g id="SVGRepo_iconCarrier">
+                <g>
+                  <path fill-rule="evenodd" clip-rule="evenodd" fill="#394240"
+                    d="M60,0H4C1.789,0,0,1.789,0,4v40c0,2.211,1.789,4,4,4h8v12 c0,1.617,0.973,3.078,2.469,3.695C14.965,63.902,15.484,64,16,64c1.039,0,2.062-0.406,2.828-1.172L33.656,48H60 c2.211,0,4-1.789,4-4V4C64,1.789,62.211,0,60,0z M56,40H32c-1.023,0-2.047,0.391-2.828,1.172L20,50.344V44c0-2.211-1.789-4-4-4H8V8 h48V40z">
+                  </path>
+                  <path fill-rule="evenodd" clip-rule="evenodd" fill="#F9EBB2"
+                    d="M56,40H32c-1.023,0-2.047,0.391-2.828,1.172L20,50.344V44 c0-2.211-1.789-4-4-4H8V8h48V40z"></path>
+                </g>
+              </g>
             </svg>
-            {{post.comment_count}}
-          </a>
-          <a href="#" class="album-action">
-            <svg stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
-              class="css-i6dzq1" viewBox="0 0 24 24">
-              <path d="M17 1l4 4-4 4" />
-              <path d="M3 11V9a4 4 0 014-4h14M7 23l-4-4 4-4" />
-              <path d="M21 13v2a4 4 0 01-4 4H3" />
+            <p id="comment-{{post.id}}" style="font-size: 20px;margin: 0;">{{post.comment_count}}</p>
+          </button>
+
+
+
+          <!-- SAVE -->
+          <button onclick="save({{post.id}})" class="adding_transparent_background"
+            style="background: transparent;border: none;">
+            {% if post.is_saved %}
+            <svg id="save" version="1.0" id="Layer_1" height="43px" width="43px" xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 64 64" enable-background="new 0 0 64 64"
+              xml:space="preserve" fill="#000000">
+              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+              <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+              <g id="SVGRepo_iconCarrier">
+                <g>
+                  <path fill="#394240"
+                    d="M52,63.999c-1.039,0-2.062-0.406-2.828-1.172L32,45.655L14.828,62.827 c-1.148,1.145-2.863,
+         1.488-4.359,0.867C8.973,63.077,8,61.616,8,59.999v-56c0-2.211,1.789-4,4-4h40c2.211,0,4,1.789,4,4v56 c0,1.617-0.973,3.078-2.469,3.695C53.035,63.901,52.516,63.999,52,63.999z M32,
+         35.999c1.023,0,2.047,0.391,2.828,1.172L48,50.343 V7.999H16v42.344l13.172-13.172C29.953,36.39,30.977,35.999,32,35.999z"></path>
+                  <path fill="#B4CCB9" id="saveButton-{{post.id}}"
+                    d="M32,35.999c1.023,0,2.047,0.391,2.828,1.172L48,50.343V7.999H16v42.344l13.172-13.172 C29.953,36.39,30.977,35.999,32,35.999z">
+                  </path>
+                </g>
+              </g>
             </svg>
-          </a>
+            {% else %}
+            <svg id="save" version="1.0" id="Layer_1" height="43px" width="43px" xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 64 64" enable-background="new 0 0 64 64"
+              xml:space="preserve" fill="#000000">
+              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+              <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+              <g id="SVGRepo_iconCarrier">
+                <g>
+                  <path fill="#394240"
+                    d="M52,63.999c-1.039,0-2.062-0.406-2.828-1.172L32,45.655L14.828,62.827 c-1.148,1.145-2.863,
+           1.488-4.359,0.867C8.973,63.077,8,61.616,8,59.999v-56c0-2.211,1.789-4,4-4h40c2.211,0,4,1.789,4,4v56 c0,1.617-0.973,3.078-2.469,3.695C53.035,63.901,52.516,63.999,52,63.999z M32,
+           35.999c1.023,0,2.047,0.391,2.828,1.172L48,50.343 V7.999H16v42.344l13.172-13.172C29.953,36.39,30.977,35.999,32,35.999z"></path>
+                  <path fill="none" id="saveButton-{{post.id}}"
+                    d="M32,35.999c1.023,0,2.047,0.391,2.828,1.172L48,50.343V7.999H16v42.344l13.172-13.172 C29.953,36.39,30.977,35.999,32,35.999z">
+                  </path>
+                </g>
+              </g>
+            </svg>
+            {% endif %}
+            <p id="save-{{post.id}}" style="font-size: 20px;margin: 0;">{{post.save_count}}</p>
+          </button>
         </div>
       </div>
       {% endfor %}
@@ -310,7 +453,17 @@
       </a>
       {% endfor %}
     </div>
+    <!-- CommentDiv -->
+    <div id="commentBox">
+      <div class="for-style">
+        <span class="closeBtn">&times;</span>
+        <div class="allComment">
 
+        </div>
+        <input type="text" id="commentContent" required placeholder="Enter your comment...">
+        <input type="button" onclick="send_comment()" value="Submit">
+      </div>
+    </div>
 
   </section>
   <script>
@@ -394,6 +547,122 @@
 
 
     }
+
+
+    //save
+    const save = async (saveId) => {
+      try {
+        const res = await fetch('save-post', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ saveId: saveId }),
+        });
+        const data = await res.json();
+        console.log(data)
+
+
+        if (res.ok) {
+          const saveButton_color = document.getElementById("saveButton-" + saveId);
+          console.log(saveButton_color)
+
+          console.log(saveButton_color.attributes)
+
+          if (data.status == "saved") {
+
+            saveButton_color.style.fill = "#B4CCB9";
+            const save_count = document.querySelector("#save-" + saveId)
+            save_count.innerText = parseInt(save_count.innerText) + 1
+
+
+          }
+          else if (data.status == "unsaved") {
+            saveButton_color.style.fill = "none";
+            const save_count = document.querySelector("#save-" + saveId)
+            save_count.innerText = parseInt(save_count.innerText) - 1
+
+          }
+        } else {
+          // Handle error response
+          console.error(data.error);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    }
+
+
+    //Comment
+    const comment = async (id) => {
+      const commentBox = document.getElementById('commentBox');
+      const cont = document.querySelector(".allComment")
+
+      window.location.href = window.location.pathname + "#" + id;
+
+
+
+      commentBox.style.display = 'flex';
+      //get req
+      const res = await fetch('/get_comment/' + id, { method: 'GET', })
+
+      const data = await res.json()
+
+      if (data.comments.length == 0) {
+        cont.innerHTML = "<p>No comments yet.</p>";
+      }
+      else {
+        cont.innerHTML = "";
+        data.comments.forEach((i) => {
+          cont.innerHTML += `<div class="comment">
+            <p class="commentUser">${i.username}</p>
+            <p class="commentUsercontent">${i.content}</p> 
+            </div>`;
+        });
+      }
+
+      cont.lastElementChild.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    }
+    const send_comment = async () => {
+      //get id from url
+      const id = (parseInt(window.location.hash.replace("#", "")))
+      const content = document.querySelector("#commentContent")
+      if (content.value == "") {
+        return
+      }
+      const res = await fetch('/add-comment', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ postId: id, content: content.value }),
+      });
+      const data = await res.json()
+      const container = document.querySelector(".allComment")
+      if (container.firstChild.innerText === "No comments yet.") {
+        container.innerHTML = ""
+      }
+      container.innerHTML += `<div class="comment">
+        <p class="commentUser">${data.comment.user}</p>
+        <p class="commentUsercontent">${data.comment.content}</p> 
+        </div>`
+      content.value = ""
+      console.log(data)
+      const comment_count = document.querySelector("#comment-" + id)
+      comment_count.innerText = parseInt(comment_count.innerText) + 1
+
+
+
+    }
+    const closeBtn = document.querySelector('.closeBtn');
+    // Hide the comment box
+    function hideCommentBox() {
+      commentBox.style.display = 'none';
+    }
+    // Add event listener to the close button
+    closeBtn.addEventListener('click', hideCommentBox);
+
+
   </script>
 </body>
 

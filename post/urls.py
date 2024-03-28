@@ -10,6 +10,7 @@ urlpatterns = [
     path('add-comment', addComment),
     path('like-image', likeImage),
     path('save-post', savePost),
+    path("get_comment/<int:id>",showComment),
     path("search-user",searchUser)
    
 ]

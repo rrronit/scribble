@@ -6,13 +6,14 @@ from .models import Post,Like,Comment,SavePost
 from supabase import create_client
 import base64
 from django.http import JsonResponse
-from .models import Post, Like
+from .models import Post, Like,Comment
 from django.shortcuts import get_object_or_404
 import uuid
 import json
+import os
 
-supabaseUrl = "https://dnltmfhvtgzozvroiwor.supabase.co"
-supabasekey="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRubHRtZmh2dGd6b3p2cm9pd29yIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcwNzMxNzQ0NCwiZXhwIjoyMDIyODkzNDQ0fQ.UeEyCm9MCEheJ9ZElyJoX1ywcdXEJvv3jhH6n8QvZ4E"
+supabaseUrl = os.getenv('supabaseUrl')
+supabasekey=os.getenv('supabasekey')
 supabase=create_client(supabaseUrl,supabasekey)
 
 def index(req):
@@ -24,6 +25,9 @@ def index(req):
         #Get like status each post
         for post in posts:
             post.is_liked = Like.objects.filter(post=post, user=user).exists()
+            post.is_saved = SavePost.objects.filter(post=post, user=user).exists()
+            post.save_count = len(SavePost.objects.filter(post=post))
+            post.comment_count=len(Comment.objects.filter(post=post))
         params={"posts":posts}
         return render(req,"homepage.html",params)
     return render(req,"account/login.html")
@@ -64,8 +68,10 @@ def likeImage(req):
     if req.method == 'POST':
         user = req.user
         data = json.loads(req.body)
-        img_id =data['imgId']  
-     
+        print("#############################",data)
+        img_id =data['imgId'] 
+        print(img_id) 
+        
         post = get_object_or_404(Post, pk=img_id)
         
         if post:
@@ -92,43 +98,65 @@ def likeImage(req):
         return JsonResponse({'error': 'Invalid request method'}, status=405)
     
     
+from django.core import serializers
+
+def showComment(request, id):
+    post = get_object_or_404(Post, pk=id)
+    comments = Comment.objects.filter(post=post)
+    # Add username field to each comment
+    comment_data = []
+    for comment in comments:
+        comment_dict = {
+            'username': comment.user.username, 
+            'content': comment.content,
+            'created_at': comment.created_at
+        }
+        comment_data.append(comment_dict)
+    return JsonResponse({'comments': comment_data})
     
     
+@csrf_exempt    
 def addComment(req):
     if req.method == 'POST':
         user = req.user
-        post_id = req.POST.get('postId') 
-        content = req.POST.get('content')  
+        data = json.loads(req.body)
+        post_id =data['postId']   
+        content =data['content']   
         
         post = get_object_or_404(Post, pk=post_id)
         
         comment = Comment.objects.create(post=post, user=user, content=content)
+
         
         comment_data = {
             'id': comment.id,
             'user': comment.user.username,
             'content': comment.content,
-            'created_at': comment.created_at.strftime("%Y-%m-%d %H:%M:%S")
         }
+        comment.save()
         
         return JsonResponse({'status': 'success', 'comment': comment_data})
     else:
         return JsonResponse({'error': 'Invalid request method'}, status=405)
 
-    
-    
-def savePost(request):
-    if request.method == 'POST':
-        user = request.user
-        post_id = request.POST.get('postId') 
-        
-        post = get_object_or_404(Post, pk=post_id)
-        
+
+@csrf_exempt
+def savePost(req):
+    if req.method == 'POST':
+        user = req.user
+        data = json.loads(req.body)
+        print("--------------------------------------------",data)
+        save_Id =data['saveId']  
+        post = get_object_or_404(Post, pk=save_Id)
+
         if SavePost.objects.filter(post=post, user=user).exists():
-            return JsonResponse({'error': 'Post already saved'}, status=400)
+            save_post = SavePost.objects.filter(post=post, user=user).delete()
+            post.save()
+            return JsonResponse({'status': 'unsaved'})
         else:
             save_post = SavePost.objects.create(post=post, user=user)
-            return JsonResponse({'status': 'success'})
+            post.save()
+            return JsonResponse({'status': 'saved'})
     else:
         return JsonResponse({'error': 'Invalid request method'}, status=405)
     

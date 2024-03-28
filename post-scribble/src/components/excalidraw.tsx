@@ -15,7 +15,7 @@ fal.config({
 const seed = Math.floor(Math.random() * 100000)
 const baseArgs = {
   sync_mode: true,
-  strength: .99,
+  strength: 0.8,
   seed
 }
 const ExcalidrawWrapper: React.FC = () => {

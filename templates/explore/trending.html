@@ -821,7 +821,7 @@ album-action {
   display: none;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: 110vh;
   width: 100vw;
   position: fixed;
   top: 0;
@@ -849,7 +849,7 @@ album-action {
   position: absolute; /* Positions the close button relative to .for-style */
   top: 10px;
   right: 1px;
-  font-size: 28px;
+  font-size:28px;
   font-weight: bold;
   cursor: pointer;
   color: #999;
@@ -991,7 +991,7 @@ input[type="button"] {
           <i class="fas fa-palette"></i>Home
         </div></a>
   
-        <a href="#">
+        <a href="/explore/">
         <div class="nav-button">
           <i class="fas fa-images"></i>Explore
         </div>
@@ -1008,7 +1008,7 @@ input[type="button"] {
           <i class="fas fa-heart"></i>Like
         </div>
       </a>
-      <a href="/trending/">
+      <a href="#">
         <div class="nav-button">
           <i class="fas fa-chart-line"></i>Trending
         </div>
@@ -1044,14 +1044,10 @@ input[type="button"] {
 
 
     <div class="container">
-      <div class="search-container">
-        <input type="text" placeholder="Search by Username or Email:" id="search-input" name="user">
-        <button class="search-btn" onclick="searchUser()">Search</button>
-        <div id="search-results">
-        </div>
-      </div>
+      
+      
 
-      <h1 class="page_heading">Explore</h1>
+      <h1 class="page_heading">Trending</h1>
       <div class="post-grid">
         {% for post in posts %}
         <div class="post-card">
@@ -1127,7 +1123,6 @@ input[type="button"] {
                 </g> </g></svg> 
               {% endif %}
               <p id="save-{{post.id}}" style="font-size: 20px;margin: 0;">{{post.save_count}}</p>
-             
             </button>
               
           </div>
@@ -1301,7 +1296,6 @@ input[type="button"] {
     }
     // Add event listener to the close button
     closeBtn.addEventListener('click', hideCommentBox);
-
 
   </script>  
 </body>

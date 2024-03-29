@@ -357,6 +357,7 @@
     background: #fff;
     padding: 2rem 0rem;
     box-shadow: 0 1px 15px rgba(0, 0, 0, 0.1);
+
   
     a {
       color: inherit;
@@ -446,7 +447,7 @@
      display: none;
     }
     body {
-     background: #5b37b7;
+     background: #378f9c;
      color: #010101;
      min-height: 100vh;
      display: grid;
@@ -457,7 +458,8 @@
    
     .bottom-bar{
      position: fixed;
-     bottom: 0px;
+     height: 110px;
+     bottom: 5px;
      margin: auto;
      width: 100%;
      display: flex;
@@ -478,7 +480,7 @@
      display: flex;
      justify-content: space-around;
      align-items: center;
-     background: #332968;
+     background: #245f68;
      width: 100%;
      padding: 0px 20px;
      transition: top 0.8s ease;

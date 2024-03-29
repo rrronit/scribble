@@ -94,7 +94,7 @@ const ExcalidrawWrapper: React.FC<{ img: StaticImageData|string; setImage: Dispa
               src={img}
               width={550}
               height={350}
-              className='bg-contain'
+              className='bg-contain md:h-[550px]'
               alt="fal image"
             />
           </div>

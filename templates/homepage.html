@@ -25,9 +25,15 @@
     background-color: #18283b;
     padding: 20px;
     border-radius: 8px;
+    position: fixed;
+    right:0px;
+
   }
 
   @media (max-width: 1250px) {
+    .album{
+      margin-right: 20px;
+    }
 
     .suggestions {
       display: none;
@@ -37,6 +43,7 @@
 
   .post-suggestion {
     display: flex;
+    margin-bottom: 120px;
   }
 
   .posts {
@@ -266,7 +273,7 @@
       </span>
     </a>
 
-    <a href="/likes">
+    <a href="/likedPost">
       <svg viewBox="0 0 100 100">
         <g transform="translate(5 5) scale(0.9 0.9)">
           <path d="M 50 35 a 20 20 0 0 1 50 0 q 0 25 -50 60 q -50 -35 -50 -60 a 25 25 0 0 1 50 0" stroke="currentColor"

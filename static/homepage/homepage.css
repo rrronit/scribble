@@ -697,8 +697,8 @@ label[for="nav-footer-toggle"] {
 
 .album {
   padding-top: 20px;
-  margin: 20px 20px 0 120px;
-  background-color: rgba(214, 214, 214, 0.596);
+  margin: 20px 480px 0 120px;
+  background-color: lightslategray;
   transition: margin 0.2s ease;
   border-radius: 20px;
   .status-main {

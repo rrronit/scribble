@@ -13,11 +13,14 @@ import uuid
 import json
 import random
 import os
+from django.contrib.auth.decorators import login_required
+
 
 supabaseUrl = os.getenv('supabaseUrl')
 supabasekey=os.getenv('supabasekey')
 supabase=create_client(supabaseUrl,supabasekey)
 
+@login_required
 def index(req):
     user=req.user
     if user.is_authenticated:
@@ -45,7 +48,7 @@ def index(req):
     return render(req,"account/login.html")
     
 
-
+@login_required
 @csrf_exempt
 def createPost(req):
     user=req.user
@@ -62,7 +65,7 @@ def createPost(req):
     newPost.save()
     return HttpResponse("done")
 
-
+@login_required
 def deletePost(req):
     user=req.user
     imageId=req.imageId
@@ -75,7 +78,7 @@ def deletePost(req):
     
     return HttpResponse("not allowed",status=404)
 
-
+@login_required
 @csrf_exempt
 def likeImage(req):
     if req.method == 'POST':
@@ -112,7 +115,7 @@ def likeImage(req):
     
     
 from django.core import serializers
-
+@login_required
 def showComment(request, id):
     post = get_object_or_404(Post, pk=id)
     comments = Comment.objects.filter(post=post)
@@ -127,7 +130,7 @@ def showComment(request, id):
         comment_data.append(comment_dict)
     return JsonResponse({'comments': comment_data})
     
-    
+@login_required
 @csrf_exempt    
 def addComment(req):
     if req.method == 'POST':
@@ -152,7 +155,7 @@ def addComment(req):
     else:
         return JsonResponse({'error': 'Invalid request method'}, status=405)
 
-
+@login_required
 @csrf_exempt
 def savePost(req):
     if req.method == 'POST':
@@ -176,6 +179,8 @@ def savePost(req):
     
 from django.db.models import Q,F
 
+
+@login_required
 @csrf_exempt
 def searchUser(req):
     userToSearch=json.loads(req.body)["user"]

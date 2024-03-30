@@ -142,7 +142,7 @@
       const currUser = "{{user}}";
       console.log(currUser);
 
-      const chatSocket = new WebSocket(`ws://${location.hostname}:8000/chat/`);
+      const chatSocket = new WebSocket(`wss://${location.hostname}:8000/chat/`);
 
       chatSocket.onmessage = function (e) {
         const data = JSON.parse(e.data);

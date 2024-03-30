@@ -7,8 +7,9 @@ from django.http import HttpResponse
 from django.contrib.auth.models import User
 from post.models import Post,Like,Comment,SavePost
 from post.models import SavePost, Like
+from django.contrib.auth.decorators import login_required
 
-
+@login_required
 def explore(req):
     user=req.user
     print(user)
@@ -26,6 +27,8 @@ def explore(req):
     return render(req,"index.html")
 
 from django.db.models import Count
+
+@login_required
 def trending(req):
    user=req.user
    if user.is_authenticated:
@@ -42,7 +45,7 @@ def trending(req):
    return render(req,"index.html")
 
 
-
+@login_required
 def savePost(req):
      user=req.user
      if user.is_authenticated:
@@ -58,6 +61,7 @@ def savePost(req):
         return render(req, 'explore/savedPost.html',params)
      return render(req,"index.html")
 
+@login_required
 def likedPost(req):
      user=req.user
      if user.is_authenticated:

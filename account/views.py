@@ -12,6 +12,8 @@ import threading
 from supabase import create_client
 import base64
 import uuid
+from django.contrib.auth.decorators import login_required
+
 
 supabaseUrl = "https://dnltmfhvtgzozvroiwor.supabase.co"
 supabasekey="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRubHRtZmh2dGd6b3p2cm9pd29yIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcwNzMxNzQ0NCwiZXhwIjoyMDIyODkzNDQ0fQ.UeEyCm9MCEheJ9ZElyJoX1ywcdXEJvv3jhH6n8QvZ4E"
@@ -175,7 +177,7 @@ def logout(req):
 
 from .models import Profile 
 from post.models import Post
-
+@login_required
 def profile(request,id_user):
    
     user_object = User.objects.get(username=id_user)
@@ -214,6 +216,7 @@ def profile(request,id_user):
 
 from .models import Followers
 
+@login_required
 def edit(request,id_user):
     
     if request.user.username == id_user:
@@ -250,7 +253,7 @@ def edit(request,id_user):
         else:
             return render(request, 'profile.html') 
 
-
+@login_required
 def follow(request):
     if request.method == 'POST':
         follower = request.POST['follower']
@@ -266,3 +269,7 @@ def follow(request):
             return redirect('/profile/'+user)
     else:
         return redirect('/')
+    
+
+
+    
